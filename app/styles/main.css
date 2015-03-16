@@ -1,24 +1,56 @@
+body, html, .container {
+  height: 100%;
+}
+
 body {
   background: #fafafa;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
+  color: #1d1d1d;
+  font-weight: 100;
+  font-size: 1.5em;
+  line-height: 1.4;
 }
 
-.hero-unit {
-  margin: 50px auto 0 auto;
-  width: 300px;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  background-color: #eee;
-  border-radius: 6px;
-  padding: 60px;
+.container {
+  text-align: center;
 }
 
-.hero-unit h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
+h1 {
+  font-size: 3em;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.date {
+  padding-top: 10%;
+}
+
+.moment {
+  height: 50%;
+}
+
+.day {
+  color: #1d1d1d;
+  background: #fafafa;
+}
+
+.night {
+  color: #fafafa;
+  background: #1d1d1d;
+}
+
+.first {
+  border-bottom: 1px solid #1d1d1d;
+}
+
+.second {
+  border-top: 1px solid #1d1d1d;
 }
 
 .browsehappy {
