@@ -67,18 +67,18 @@ input {
   right: 0;
 }
 
-.day.yours {
+.day.my {
   border-bottom: 1px solid #1d1d1d;
 }
 
-.night.yours {
+.night.my {
   border-bottom: 1px solid #fafafa;
 }
 
-.yours {
+.my {
 }
 
-.theirs {
+.your {
 }
 
 .browsehappy {
