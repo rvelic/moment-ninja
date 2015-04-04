@@ -11,8 +11,10 @@ if (typeof moment === 'undefined') {
 
 +function main($, moment) {
   var fn = {}
-    , timestamp
-    , zones = []
+    , __ = {
+        timestamp: ''
+      , zones: []
+    }
     , my = {
         moment: moment()
       , timezone: false
@@ -45,15 +47,15 @@ if (typeof moment === 'undefined') {
   }();
 
   fn.setTime = function setTime( unixtime ) {
-    timestamp = unixtime || moment().unix() * 1000;
+    __.timestamp = unixtime || moment().unix() * 1000;
     // Set my elements
-    my.moment = my.timezone ? moment.tz( timestamp, my.timezone ) : moment( timestamp );
+    my.moment = my.timezone ? moment.tz( __.timestamp, my.timezone ) : moment( __.timestamp );
     my.elm.date.val( my.moment.format('MMMM Do') );
     my.elm.time.val( my.moment.format('HH:mm:ss') );
     my.elm.zone.val( my.timezone ? fn.reverse( my.timezone ) : my.moment.format('Z z') );
     my.elm.moment.addClass( my.moment.format('a') );
     // Set your elements
-    your.moment = your.timezone ? moment.tz( timestamp, your.timezone ) : moment( timestamp );
+    your.moment = your.timezone ? moment.tz( __.timestamp, your.timezone ) : moment( __.timestamp );
     your.elm.date.val( your.moment.format('MMMM Do') );
     your.elm.time.val( your.moment.format('HH:mm:ss') );
     your.elm.zone.val( your.timezone ? fn.reverse( your.timezone ) : your.moment.format('Z z') );
@@ -86,7 +88,7 @@ if (typeof moment === 'undefined') {
     if( e.which === 13 ) {
       var zone = $( this ).val();
       your.timezone = fn.reverse( zone, true );
-      fn.setTime( timestamp );
+      fn.setTime( __.timestamp );
       return false;
     }
   };
@@ -122,8 +124,8 @@ if (typeof moment === 'undefined') {
 
   your.elm.zone.keypress( fn.onEnterZone );
 
-  zones = $.map( moment.tz.names(), fn.reverse );
-  $('.zone').tabcomplete( zones, tabOptions );
+  __.zones = $.map( moment.tz.names(), fn.reverse );
+  $('.zone').tabcomplete( __.zones, tabOptions );
   your.timezone = fn.getYourTimezone();
 
 }(jQuery, moment);
