@@ -53,13 +53,13 @@ if (typeof moment === 'undefined') {
     my.elm.date.val( my.moment.format('MMMM Do') );
     my.elm.time.val( my.moment.format('HH:mm:ss') );
     my.elm.zone.val( my.timezone ? fn.reverse( my.timezone ) : my.moment.format('Z z') );
-    my.elm.moment.addClass( my.moment.format('a') );
+    my.elm.moment.removeClass('am pm').addClass( my.moment.format('a') );
     // Set your elements
     your.moment = your.timezone ? moment.tz( __.timestamp, your.timezone ) : moment( __.timestamp );
     your.elm.date.val( your.moment.format('MMMM Do') );
     your.elm.time.val( your.moment.format('HH:mm:ss') );
     your.elm.zone.val( your.timezone ? fn.reverse( your.timezone ) : your.moment.format('Z z') );
-    your.elm.moment.addClass( your.moment.format('a') );
+    your.elm.moment.removeClass('am pm').addClass( your.moment.format('a') );
   };
 
   fn.detect = function detect( cb ) {
@@ -68,6 +68,16 @@ if (typeof moment === 'undefined') {
     }, function error( err ) {
       cb( err );
     });
+  };
+
+  fn.reverse = function reverse( zone, capitalize ) {
+    return zone.split('/').map(function each( word ) {
+      if( capitalize !== true ) {
+        return word;
+      }
+      word = word.toLowerCase();
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).reverse().join('/');
   };
 
   fn.getYourTimezone = function getYourTimezone() {
@@ -84,35 +94,43 @@ if (typeof moment === 'undefined') {
     $( this ).select();
   };
 
-  fn.onEnterMyZone = function onEnterZone(e) {
-    if( e.which === 13 ) {
-      var zone = $( this ).val();
+  fn.onEnterZone = function onEnterZone(e) {
+    if( e.which !== 13 ) {
+      return;
+    }
+    // only care about enter
+    var zone = $( this ).val();
+    if( $( this ).parent().hasClass( 'my' ) ) {
       my.timezone = fn.reverse( zone, true );
-      fn.setTime( __.timestamp );
-      return false;
     }
-  };
-
-  fn.onEnterYourZone = function onEnterZone(e) {
-    if( e.which === 13 ) {
-      var zone = $( this ).val();
+    else {
       your.timezone = fn.reverse( zone, true );
-      fn.setTime( __.timestamp );
-      return false;
     }
+    fn.setTime( __.timestamp );
+    return false;
   };
 
-  fn.reverse = function reverse( zone, capitalize ) {
-    return zone.split('/').map(function each( word ) {
-      if( capitalize !== true ) {
-        return word;
-      }
-      word = word.toLowerCase();
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    }).reverse().join('/');
+  fn.onEnterTime = function onEnterTime(e) {
+    if( e.which !== 13 ) {
+      return;
+    }
+    // only care about enter
+    var time, parts;
+    if( $( this ).parent().hasClass( 'my' ) ) {
+      time = moment.tz( __.timestamp, my.timezone );
+    }
+    else {
+      time = moment.tz( __.timestamp, your.timezone );
+    }
+    parts = $( this ).val().split(':');
+
+    __.timestamp = time.hour( parts[0] ).minute( parts[1] ).unix() * 1000;
+    fn.setTime( __.timestamp );
+    return false;
   };
 
   // Init
+
   fn.detect(function( err, position ) {
     var location = position.coords.latitude + ',' + position.coords.longitude;
     $.getJSON( 'https://maps.googleapis.com/maps/api/timezone/json?location=' + location, {
@@ -121,7 +139,7 @@ if (typeof moment === 'undefined') {
       my.timezone = data.timeZoneId;
     });
   });
-  
+
   __.zones = $.map( moment.tz.names(), fn.reverse );
   $('.zone').tabcomplete( __.zones, tabOptions );
   your.timezone = fn.getYourTimezone();
@@ -134,8 +152,11 @@ if (typeof moment === 'undefined') {
   your.elm.time.on('click', fn.onClickStopTime);
   your.elm.zone.on('click', fn.onClickSelectInput);
 
-  my.elm.zone.keypress( fn.onEnterMyZone );
-  your.elm.zone.keypress( fn.onEnterYourZone );
+  my.elm.time.keypress( fn.onEnterTime );
+  my.elm.zone.keypress( fn.onEnterZone );
+
+  your.elm.time.keypress( fn.onEnterTime );
+  your.elm.zone.keypress( fn.onEnterZone );
 
 }(jQuery, moment);
 
