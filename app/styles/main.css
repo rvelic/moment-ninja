@@ -36,12 +36,12 @@ input {
   height: 50%;
 }
 
-.day {
+.pm {
   color: #1d1d1d;
   background: #fafafa;
 }
 
-.night {
+.am {
   color: #fafafa;
   background: #1d1d1d;
 }
@@ -67,11 +67,11 @@ input {
   right: 0;
 }
 
-.day.my {
+.pm.my {
   border-bottom: 1px solid #1d1d1d;
 }
 
-.night.my {
+.am.my {
   border-bottom: 1px solid #fafafa;
 }
 

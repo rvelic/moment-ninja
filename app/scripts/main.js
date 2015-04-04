@@ -19,6 +19,7 @@ if (typeof moment === 'undefined') {
           date: $('.my .date')
         , time: $('.my .time')
         , zone: $('.my .zone')
+        , moment: $('.my.moment')
       }
     }
     , your = {
@@ -28,6 +29,7 @@ if (typeof moment === 'undefined') {
           date: $('.your .date')
         , time: $('.your .time')
         , zone: $('.your .zone')
+        , moment: $('.your.moment')
       }
     }
     , tabOptions = {
@@ -48,11 +50,13 @@ if (typeof moment === 'undefined') {
       my.elm.date.val( my.moment.format('MMMM Do') );
       my.elm.time.val( my.moment.format('HH:mm:ss') );
       my.elm.zone.val( my.timezone ? fn.reverse( my.timezone ) : my.moment.format('Z z') );
+      my.elm.moment.addClass( my.moment.format('a') );
       // Set your elements
       your.moment = your.timezone ? moment.tz( your.timezone ) : moment();
       your.elm.date.val( your.moment.format('MMMM Do') );
       your.elm.time.val( your.moment.format('HH:mm:ss') );
       your.elm.zone.val( your.timezone ? fn.reverse( your.timezone ) : your.moment.format('Z z') );
+      your.elm.moment.addClass( your.moment.format('a') );
       start();
     }, 500);
   }();
@@ -69,6 +73,11 @@ if (typeof moment === 'undefined') {
     });
   };
 
+  fn.getYourTimezone = function getYourTimezone() {
+    var index = Math.floor(Math.random() * (moment.tz.names().length - 0 + 1)) + 0;
+    return moment.tz.names()[ index ];
+  };
+
   // Init
   fn.detect(function( err, position ) {
     var location = position.coords.latitude + ',' + position.coords.longitude;
@@ -78,13 +87,6 @@ if (typeof moment === 'undefined') {
       my.timezone = data.timeZoneId;
     });
   });
-
-  fn.getYourTimezone = function getYourTimezone() {
-    var index = Math.floor(Math.random() * (moment.tz.names().length - 0 + 1)) + 0;
-    return moment.tz.names()[ index ];
-  };
-
-  // Run everything
 
   my.elm.date.on('click', fn.onClickHandler);
   my.elm.time.on('click', fn.onClickHandler);
