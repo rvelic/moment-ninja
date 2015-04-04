@@ -12,7 +12,7 @@ if (typeof moment === 'undefined') {
 +function main($, moment) {
   var fn = {}
     , __ = {
-        timestamp: ''
+        timestamp: 0
       , zones: []
     }
     , my = {
@@ -46,8 +46,8 @@ if (typeof moment === 'undefined') {
     }, 500);
   }();
 
-  fn.setTime = function setTime( unixtime ) {
-    __.timestamp = unixtime || moment().unix() * 1000;
+  fn.setTime = function setTime( timestamp ) {
+    __.timestamp = timestamp || moment().unix() * 1000;
     // Set my elements
     my.moment = my.timezone ? moment.tz( __.timestamp, my.timezone ) : moment( __.timestamp );
     my.elm.date.val( my.moment.format('MMMM Do') );
@@ -110,21 +110,18 @@ if (typeof moment === 'undefined') {
     return false;
   };
 
-  fn.onEnterTime = function onEnterTime(e) {
+  fn.onEnterDatetime = function onEnterDatetime(e) {
     if( e.which !== 13 ) {
       return;
     }
     // only care about enter
-    var time, parts;
-    if( $( this ).parent().hasClass( 'my' ) ) {
-      time = moment.tz( __.timestamp, my.timezone );
-    }
-    else {
-      time = moment.tz( __.timestamp, your.timezone );
-    }
-    parts = $( this ).val().split(':');
+    var isMy = $( this ).parent().hasClass( 'my' )
+      , date = isMy ? my.elm.date.val() : your.elm.date.val()
+      , time = isMy ? my.elm.time.val() : your.elm.time.val()
+      , zone = isMy ? my.timezone : your.timezone
+      , datetime = moment.tz( date + time, 'MMMM DoHH:mm:ss', zone );
 
-    __.timestamp = time.hour( parts[0] ).minute( parts[1] ).unix() * 1000;
+    __.timestamp = datetime.unix() * 1000;
     fn.setTime( __.timestamp );
     return false;
   };
@@ -152,10 +149,12 @@ if (typeof moment === 'undefined') {
   your.elm.time.on('click', fn.onClickStopTime);
   your.elm.zone.on('click', fn.onClickSelectInput);
 
-  my.elm.time.keypress( fn.onEnterTime );
+  my.elm.date.keypress( fn.onEnterDatetime );
+  my.elm.time.keypress( fn.onEnterDatetime );
   my.elm.zone.keypress( fn.onEnterZone );
 
-  your.elm.time.keypress( fn.onEnterTime );
+  your.elm.date.keypress( fn.onEnterDatetime );
+  your.elm.time.keypress( fn.onEnterDatetime );
   your.elm.zone.keypress( fn.onEnterZone );
 
 }(jQuery, moment);
