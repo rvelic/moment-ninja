@@ -4,6 +4,7 @@
   "dependencies": {
     "jquery": "~1.11.1",
     "moment-timezone": "~0.3.0",
-    "normalize.css": "~3.0.2"
+    "normalize.css": "~3.0.2",
+    "tabcomplete": "~1.5.0"
   }
 }
