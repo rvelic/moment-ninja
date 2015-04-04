@@ -61,10 +61,6 @@ if (typeof moment === 'undefined') {
     }, 500);
   }();
 
-  fn.onClickHandler = function onClickHandler() {
-    clearTimeout( fn.refresh );
-  };
-
   fn.detect = function detect( cb ) {
     navigator.geolocation.getCurrentPosition(function success( position ) {
       cb( null, position );
@@ -78,6 +74,15 @@ if (typeof moment === 'undefined') {
     return moment.tz.names()[ index ];
   };
 
+  fn.onClickStopTime = function onClickStopTime() {
+    clearTimeout( fn.refresh );
+  };
+
+  fn.onClickSelectInput = function onClickSelectInput() {
+    fn.onClickStopTime();
+    $( this ).select();
+  };
+
   // Init
   fn.detect(function( err, position ) {
     var location = position.coords.latitude + ',' + position.coords.longitude;
@@ -88,13 +93,13 @@ if (typeof moment === 'undefined') {
     });
   });
 
-  my.elm.date.on('click', fn.onClickHandler);
-  my.elm.time.on('click', fn.onClickHandler);
-  my.elm.zone.on('click', fn.onClickHandler);
+  my.elm.date.on('click', fn.onClickStopTime);
+  my.elm.time.on('click', fn.onClickStopTime);
+  my.elm.zone.on('click', fn.onClickSelectInput);
 
-  your.elm.date.on('click', fn.onClickHandler);
-  your.elm.time.on('click', fn.onClickHandler);
-  your.elm.zone.on('click', fn.onClickHandler);
+  your.elm.date.on('click', fn.onClickStopTime);
+  your.elm.time.on('click', fn.onClickStopTime);
+  your.elm.zone.on('click', fn.onClickSelectInput);
 
   $('.zone').tabcomplete( zones, tabOptions );
   your.timezone = fn.getYourTimezone();
