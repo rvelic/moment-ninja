@@ -84,7 +84,16 @@ if (typeof moment === 'undefined') {
     $( this ).select();
   };
 
-  fn.onEnterZone = function onEnterZone(e) {
+  fn.onEnterMyZone = function onEnterZone(e) {
+    if( e.which === 13 ) {
+      var zone = $( this ).val();
+      my.timezone = fn.reverse( zone, true );
+      fn.setTime( __.timestamp );
+      return false;
+    }
+  };
+
+  fn.onEnterYourZone = function onEnterZone(e) {
     if( e.which === 13 ) {
       var zone = $( this ).val();
       your.timezone = fn.reverse( zone, true );
@@ -112,8 +121,11 @@ if (typeof moment === 'undefined') {
       my.timezone = data.timeZoneId;
     });
   });
-
   
+  __.zones = $.map( moment.tz.names(), fn.reverse );
+  $('.zone').tabcomplete( __.zones, tabOptions );
+  your.timezone = fn.getYourTimezone();
+
   my.elm.date.on('click', fn.onClickStopTime);
   my.elm.time.on('click', fn.onClickStopTime);
   my.elm.zone.on('click', fn.onClickSelectInput);
@@ -122,11 +134,8 @@ if (typeof moment === 'undefined') {
   your.elm.time.on('click', fn.onClickStopTime);
   your.elm.zone.on('click', fn.onClickSelectInput);
 
-  your.elm.zone.keypress( fn.onEnterZone );
-
-  __.zones = $.map( moment.tz.names(), fn.reverse );
-  $('.zone').tabcomplete( __.zones, tabOptions );
-  your.timezone = fn.getYourTimezone();
+  my.elm.zone.keypress( fn.onEnterMyZone );
+  your.elm.zone.keypress( fn.onEnterYourZone );
 
 }(jQuery, moment);
 
