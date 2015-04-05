@@ -60,6 +60,7 @@
 
   fn.setTime = function setTime( timestamp ) {
     __.timestamp = timestamp || moment().unix() * 1000;
+    console.log('INCOMING!', my.timezone, your.timezone);
     // Set my elements
     my.moment = my.timezone ? moment.tz( __.timestamp, my.timezone ) : moment( __.timestamp );
     my.elm.date.val( my.moment.format('MMMM Do') );
@@ -188,7 +189,7 @@
     fn.setTime( params.ts );
   }
   else {
-    fn.tick();
+    your.timezone = fn.getYourTimezone();
     fn.detect(function( err, position ) {
       if( err ) {
         return;
@@ -200,10 +201,10 @@
         my.timezone = res.timeZoneId;
       });
     });
+    fn.tick();
   }
 
   __.zones = $.map( moment.tz.names(), fn.reverse );
-  your.timezone = fn.getYourTimezone();
 
   $('.zone').tabcomplete( __.zones, tabOptions );
   $('.btn-share').on( 'click', fn.onClickShare );
