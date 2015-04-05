@@ -88,14 +88,23 @@
     });
   };
 
-  fn.reverse = function reverse( zone, capitalize ) {
+  fn.reverse = function reverse( zone ) {
     return zone.split('/').map(function each( word ) {
-      if( capitalize !== true ) {
-        return word;
+      if( word.indexOf( '_' ) > -1 ) {
+        word = word.replace( '_', ' ' );
+        return $.map( word.split( ' ' ), fn.capitalize ).join( ' ' );
+      } 
+      else if ( word.indexOf( ' ' ) > -1 ) {
+        word = word.replace( ' ', '_' );
+        return $.map( word.split( '_' ), fn.capitalize ).join( '_' );
       }
-      word = word.toLowerCase();
-      return word.charAt(0).toUpperCase() + word.slice(1);
+      return fn.capitalize( word );
     }).reverse().join('/');
+  };
+
+  fn.capitalize = function capitalize( word ) {
+    word = word.toLowerCase();
+    return word.charAt(0).toUpperCase() + word.slice(1);
   };
 
   fn.getYourTimezone = function getYourTimezone() {
@@ -118,10 +127,10 @@
     }
     var zone = $( this ).val();
     if( $( this ).parent().hasClass( 'my' ) ) {
-      my.timezone = fn.reverse( zone, true );
+      my.timezone = fn.reverse( zone );
     }
     else {
-      your.timezone = fn.reverse( zone, true );
+      your.timezone = fn.reverse( zone );
     }
     fn.setTime( __.timestamp );
     return false;
