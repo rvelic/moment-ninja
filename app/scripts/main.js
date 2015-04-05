@@ -43,7 +43,7 @@ if (typeof moment === 'undefined') {
     fn.refresh = setTimeout(function timer() {
       fn.setTime();
       tick();
-    }, 500);
+    }, 200);
   }();
 
   fn.setTime = function setTime( timestamp ) {
@@ -130,8 +130,23 @@ if (typeof moment === 'undefined') {
     return false;
   };
 
-  // Init
+  fn.onClickShare = function onClickShare() {
+    var params = {
+        ts: __.timestamp
+      , mz: my.timezone
+      , yz: your.timezone  
+    };
 
+    $('.share').slideDown(function done() {
+      $('.share input').val( window.location.href + $.param( params ) ).select();
+    });
+  };
+
+  fn.onClickClose = function onClickClose() {
+    $('.share').hide();
+  };
+
+  // Init
   fn.detect(function( err, position ) {
     var location = position.coords.latitude + ',' + position.coords.longitude;
     $.getJSON( 'https://maps.googleapis.com/maps/api/timezone/json?location=' + location, {
@@ -142,16 +157,19 @@ if (typeof moment === 'undefined') {
   });
 
   __.zones = $.map( moment.tz.names(), fn.reverse );
-  $('.zone').tabcomplete( __.zones, tabOptions );
   your.timezone = fn.getYourTimezone();
 
-  my.elm.date.on('click', fn.onClickStopTime);
-  my.elm.time.on('click', fn.onClickStopTime);
-  my.elm.zone.on('click', fn.onClickSelectInput);
+  $('.zone').tabcomplete( __.zones, tabOptions );
+  $('.btn-share').on( 'click', fn.onClickShare );
+  $('.btn-close').on( 'click', fn.onClickClose );
 
-  your.elm.date.on('click', fn.onClickStopTime);
-  your.elm.time.on('click', fn.onClickStopTime);
-  your.elm.zone.on('click', fn.onClickSelectInput);
+  my.elm.date.on( 'click', fn.onClickStopTime );
+  my.elm.time.on( 'click', fn.onClickStopTime );
+  my.elm.zone.on( 'click', fn.onClickSelectInput );
+
+  your.elm.date.on( 'click', fn.onClickStopTime );
+  your.elm.time.on( 'click', fn.onClickStopTime );
+  your.elm.zone.on( 'click', fn.onClickSelectInput );
 
   my.elm.date.keypress( fn.onEnterDatetime );
   my.elm.time.keypress( fn.onEnterDatetime );
@@ -162,4 +180,3 @@ if (typeof moment === 'undefined') {
   your.elm.zone.keypress( fn.onEnterZone );
 
 }(jQuery, moment);
-

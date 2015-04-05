@@ -15,6 +15,7 @@
     "jQuery",
     "console",
     "moment",
-    "navigator"
+    "navigator",
+    "window"
   ]
 }
