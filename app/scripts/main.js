@@ -60,7 +60,6 @@
 
   fn.setTime = function setTime( timestamp ) {
     __.timestamp = timestamp || moment().unix() * 1000;
-    console.log('INCOMING!', my.timezone, your.timezone);
     // Set my elements
     my.moment = my.timezone ? moment.tz( __.timestamp, my.timezone ) : moment( __.timestamp );
     my.elm.date.val( my.moment.format('MMMM Do') );
