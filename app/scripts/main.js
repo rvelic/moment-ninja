@@ -63,13 +63,13 @@
     // Set my elements
     my.moment = my.timezone ? moment.tz( __.timestamp, my.timezone ) : moment( __.timestamp );
     my.elm.date.val( my.moment.format('MMMM Do') );
-    my.elm.time.val( my.moment.format('HH:mm:ss') );
+    my.elm.time.val( my.moment.format('HH:mm') );
     my.elm.zone.val( my.timezone ? fn.reverse( my.timezone ) : my.moment.format('Z z') );
     my.elm.moment.removeClass('day night').addClass( fn.dayOrNight( my.moment ) );
     // Set your elements
     your.moment = your.timezone ? moment.tz( __.timestamp, your.timezone ) : moment( __.timestamp );
     your.elm.date.val( your.moment.format('MMMM Do') );
-    your.elm.time.val( your.moment.format('HH:mm:ss') );
+    your.elm.time.val( your.moment.format('HH:mm') );
     your.elm.zone.val( your.timezone ? fn.reverse( your.timezone ) : your.moment.format('Z z') );
     your.elm.moment.removeClass('day night').addClass( fn.dayOrNight( your.moment ) );
   };
@@ -155,7 +155,7 @@
       , date = isMy ? my.elm.date.val() : your.elm.date.val()
       , time = isMy ? my.elm.time.val() : your.elm.time.val()
       , zone = isMy ? my.timezone : your.timezone
-      , datetime = moment.tz( date + time, 'MMMM DoHH:mm:ss', zone );
+      , datetime = moment.tz( date + time, 'MMMM DoHH:mm', zone );
 
     fn.setTime( datetime.unix() * 1000 );
     return false;
