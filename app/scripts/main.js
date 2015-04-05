@@ -46,7 +46,6 @@
       url.yz = search[2];
     }
     catch( err ) {
-      window.location.search = '';
       return false;
     }
     return !url.ts || !url.mz || !url.yz ? false : url;
@@ -168,11 +167,7 @@
         ts: __.timestamp
       , mz: my.timezone
       , yz: your.timezone  
-    } , url = window.location.href;
-
-    if( fn.parseURL() === false ) {
-      url += '?' + $.param( params );
-    }
+    } , url = window.location.hostname + '?' + $.param( params );
 
     $( '.share' ).slideDown( 400, function done() {
       $( this ).find( 'input' ).val( url ).select();
