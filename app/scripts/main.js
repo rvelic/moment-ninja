@@ -108,8 +108,20 @@
   };
 
   fn.getYourTimezone = function getYourTimezone() {
-    var index = Math.floor(Math.random() * (moment.tz.names().length - 0 + 1)) + 0;
-    return moment.tz.names()[ index ];
+    var retries = 0
+      , index = 0
+      , max = moment.tz.names().length
+      , found = false
+      , zone = '';
+    while( !found ) {
+      index = Math.floor(Math.random() * ( max - 0 + 1)) + 0;
+      zone = moment.tz.names()[ index ];
+      if( zone.indexOf( '/' ) > -1 && zone.indexOf( 'ETC' ) < 0 || retries > 9 ) {
+        found = true;
+      }
+      retries++;
+    }
+    return zone;
   };
 
   fn.onClickStopTime = function onClickStopTime() {
