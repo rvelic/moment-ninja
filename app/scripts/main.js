@@ -1,22 +1,14 @@
 /* jshint devel:true */
 'use strict';
 
-if (typeof jQuery === 'undefined') {
-  throw new Error('This ninja requires jQuery');
-}
-
-if (typeof moment === 'undefined') {
-  throw new Error('This ninja requires moment.js');
-}
-
-+function main($, moment) {
++function main( $, moment, jstz ) {
   var fn = {}
     , __ = {
         timestamp: 0
       , zones: []
     }
     , my = {
-        moment: moment()
+        moment: {}
       , timezone: false
       , elm: {
           date: $('.my .date')
@@ -26,7 +18,7 @@ if (typeof moment === 'undefined') {
       }
     }
     , your = {
-        moment: moment()
+        moment: {}
       , timezone: false
       , elm: {
           date: $('.your .date')
@@ -54,6 +46,7 @@ if (typeof moment === 'undefined') {
       url.yz = search[2];
     }
     catch( err ) {
+      window.location.search = '';
       return false;
     }
     return !url.ts || !url.mz || !url.yz ? false : url;
@@ -87,6 +80,7 @@ if (typeof moment === 'undefined') {
   };
 
   fn.detect = function detect( cb ) {
+    my.timezone = jstz.determine().name();
     navigator.geolocation.getCurrentPosition(function success( position ) {
       cb( null, position );
     }, function error( err ) {
@@ -122,7 +116,6 @@ if (typeof moment === 'undefined') {
     if( e.which !== 13 ) {
       return;
     }
-    // only care about enter
     var zone = $( this ).val();
     if( $( this ).parent().hasClass( 'my' ) ) {
       my.timezone = fn.reverse( zone, true );
@@ -138,15 +131,13 @@ if (typeof moment === 'undefined') {
     if( e.which !== 13 ) {
       return;
     }
-    // only care about enter
     var isMy = $( this ).parent().hasClass( 'my' )
       , date = isMy ? my.elm.date.val() : your.elm.date.val()
       , time = isMy ? my.elm.time.val() : your.elm.time.val()
       , zone = isMy ? my.timezone : your.timezone
       , datetime = moment.tz( date + time, 'MMMM DoHH:mm:ss', zone );
 
-    __.timestamp = datetime.unix() * 1000;
-    fn.setTime( __.timestamp );
+    fn.setTime( datetime.unix() * 1000 );
     return false;
   };
 
@@ -158,18 +149,19 @@ if (typeof moment === 'undefined') {
       , yz: your.timezone  
     } , uri = window.location.href + '?' + $.param( params );
 
-    $('.share').slideDown( 400, function done() {
-      $( this ).find('input').val( uri ).select();
+    $( '.share' ).slideDown( 400, function done() {
+      $( this ).find( 'input' ).val( uri ).select();
     });
   };
 
   fn.onClickClose = function onClickClose(e) {
     e.preventDefault();
-    $('.share').hide();
+    $( '.share' ).hide();
   };
 
   // Init
   var params = fn.parseURL();
+
   if( params !== false ) {
     my.timezone = params.mz;
     your.timezone = params.yz;
@@ -178,11 +170,14 @@ if (typeof moment === 'undefined') {
   else {
     fn.tick();
     fn.detect(function( err, position ) {
+      if( err ) {
+        return;
+      }
       var location = position.coords.latitude + ',' + position.coords.longitude;
       $.getJSON( 'https://maps.googleapis.com/maps/api/timezone/json?location=' + location, {
         timestamp: position.timestamp / 1000
-      }, function success( data ) {
-        my.timezone = data.timeZoneId;
+      }, function success( res ) {
+        my.timezone = res.timeZoneId;
       });
     });
   }
@@ -210,4 +205,4 @@ if (typeof moment === 'undefined') {
   your.elm.time.keypress( fn.onEnterDatetime );
   your.elm.zone.keypress( fn.onEnterZone );
 
-}(jQuery, moment);
+}(jQuery, moment, jstz);

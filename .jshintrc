@@ -1,7 +1,7 @@
 {
   "node": true,
   "browser": false,
-  "maxcomplexity": 15,
+  "maxcomplexity": false,
   "curly": true,
   "laxcomma": true,
   "laxbreak": true,
@@ -15,7 +15,9 @@
     "jQuery",
     "console",
     "moment",
+    "jstz",
     "navigator",
+    "document",
     "window"
   ]
 }
