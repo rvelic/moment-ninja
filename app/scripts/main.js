@@ -39,12 +39,32 @@ if (typeof moment === 'undefined') {
       hint: 'select',
     };
 
-  +function tick() {
+  fn.parseURL = function parseURL() {
+    var search = []
+      , url = {};
+
+    try {
+      search = decodeURIComponent( window.location.search )
+      .split( '&' )
+      .map(function each( segment ) {
+        return segment.split('=')[ 1 ];
+      });
+      url.ts = parseInt( search[0] );
+      url.mz = search[1];
+      url.yz = search[2];
+    }
+    catch( err ) {
+      return false;
+    }
+    return !url.ts || !url.mz || !url.yz ? false : url;
+  };
+
+  fn.tick = function tick() {
     fn.refresh = setTimeout(function timer() {
       fn.setTime();
-      tick();
+      fn.tick();
     }, 200);
-  }();
+  };
 
   fn.setTime = function setTime( timestamp ) {
     __.timestamp = timestamp || moment().unix() * 1000;
@@ -130,31 +150,42 @@ if (typeof moment === 'undefined') {
     return false;
   };
 
-  fn.onClickShare = function onClickShare() {
+  fn.onClickShare = function onClickShare(e) {
+    e.preventDefault();
     var params = {
         ts: __.timestamp
       , mz: my.timezone
       , yz: your.timezone  
-    };
+    } , uri = window.location.href + '?' + $.param( params );
 
     $('.share').slideDown( 400, function done() {
-      $( this ).find('input').val( window.location.href + $.param( params ) ).select();
+      $( this ).find('input').val( uri ).select();
     });
   };
 
-  fn.onClickClose = function onClickClose() {
+  fn.onClickClose = function onClickClose(e) {
+    e.preventDefault();
     $('.share').hide();
   };
 
   // Init
-  fn.detect(function( err, position ) {
-    var location = position.coords.latitude + ',' + position.coords.longitude;
-    $.getJSON( 'https://maps.googleapis.com/maps/api/timezone/json?location=' + location, {
-      timestamp: position.timestamp / 1000
-    }, function success( data ) {
-      my.timezone = data.timeZoneId;
+  var params = fn.parseURL();
+  if( params !== false ) {
+    my.timezone = params.mz;
+    your.timezone = params.yz;
+    fn.setTime( params.ts );
+  }
+  else {
+    fn.tick();
+    fn.detect(function( err, position ) {
+      var location = position.coords.latitude + ',' + position.coords.longitude;
+      $.getJSON( 'https://maps.googleapis.com/maps/api/timezone/json?location=' + location, {
+        timestamp: position.timestamp / 1000
+      }, function success( data ) {
+        my.timezone = data.timeZoneId;
+      });
     });
-  });
+  }
 
   __.zones = $.map( moment.tz.names(), fn.reverse );
   your.timezone = fn.getYourTimezone();
