@@ -167,7 +167,7 @@
     e.preventDefault();
     $( '.share' ).hide();
   };
-
+  
   // Init
   var params = fn.parseURL();
 
