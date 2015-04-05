@@ -91,11 +91,11 @@
   fn.reverse = function reverse( zone ) {
     return zone.split('/').map(function each( word ) {
       if( word.indexOf( '_' ) > -1 ) {
-        word = word.replace( '_', ' ' );
+        word = word.replace( /_/g, ' ' );
         return $.map( word.split( ' ' ), fn.capitalize ).join( ' ' );
       } 
-      else if ( word.indexOf( ' ' ) > -1 ) {
-        word = word.replace( ' ', '_' );
+      else if( word.indexOf( ' ' ) > -1 ) {
+        word = word.replace( /\s/g , '_' );
         return $.map( word.split( '_' ), fn.capitalize ).join( '_' );
       }
       return fn.capitalize( word );
@@ -114,9 +114,9 @@
       , found = false
       , zone = '';
     while( !found ) {
-      index = Math.floor(Math.random() * ( max - 0 + 1)) + 0;
+      index = Math.floor( Math.random() * ( max - 0 + 1) ) + 0;
       zone = moment.tz.names()[ index ];
-      if( zone.indexOf( '/' ) > -1 && zone.toLowerCase().indexOf( 'etc' ) < 0 || retries > 9 ) {
+      if(( zone.indexOf( '/' ) > -1 && zone.toLowerCase().indexOf( 'etc' ) < 0 ) || retries > 9 ) {
         found = true;
       }
       retries++;
