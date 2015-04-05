@@ -116,7 +116,7 @@
     while( !found ) {
       index = Math.floor(Math.random() * ( max - 0 + 1)) + 0;
       zone = moment.tz.names()[ index ];
-      if( zone.indexOf( '/' ) > -1 && zone.indexOf( 'ETC' ) < 0 || retries > 9 ) {
+      if( zone.indexOf( '/' ) > -1 && zone.toLowerCase().indexOf( 'etc' ) < 0 || retries > 9 ) {
         found = true;
       }
       retries++;
