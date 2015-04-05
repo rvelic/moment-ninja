@@ -168,10 +168,14 @@
         ts: __.timestamp
       , mz: my.timezone
       , yz: your.timezone  
-    } , uri = window.location.href + '?' + $.param( params );
+    } , url = window.location.href;
+
+    if( fn.parseURL() === false ) {
+      url += '?' + $.param( params );
+    }
 
     $( '.share' ).slideDown( 400, function done() {
-      $( this ).find( 'input' ).val( uri ).select();
+      $( this ).find( 'input' ).val( url ).select();
     });
   };
 
