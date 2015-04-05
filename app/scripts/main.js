@@ -137,8 +137,8 @@ if (typeof moment === 'undefined') {
       , yz: your.timezone  
     };
 
-    $('.share').slideDown(function done() {
-      $('.share input').val( window.location.href + $.param( params ) ).select();
+    $('.share').slideDown( 400, function done() {
+      $( this ).find('input').val( window.location.href + $.param( params ) ).select();
     });
   };
 
