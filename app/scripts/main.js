@@ -41,14 +41,14 @@
       .map(function each( segment ) {
         return segment.split('=')[ 1 ];
       });
-      url.ts = parseInt( search[0] );
-      url.mz = search[1];
-      url.yz = search[2];
+      url.t = parseInt( search[0] ) * 1000;
+      url.m = search[1];
+      url.y = search[2];
     }
     catch( err ) {
       return false;
     }
-    return !url.ts || !url.mz || !url.yz ? false : url;
+    return !url.t || !url.m || !url.y ? false : url;
   };
 
   fn.tick = function tick() {
@@ -164,9 +164,9 @@
   fn.onClickShare = function onClickShare(e) {
     e.preventDefault();
     var params = {
-        ts: __.timestamp
-      , mz: my.timezone
-      , yz: your.timezone  
+        t: __.timestamp / 1000
+      , m: my.timezone
+      , y: your.timezone  
     } , url = window.location.hostname + '?' + $.param( params );
 
     $( '.share' ).slideDown( 400, function done() {
@@ -183,9 +183,9 @@
   var params = fn.parseURL();
 
   if( params !== false ) {
-    my.timezone = params.mz;
-    your.timezone = params.yz;
-    fn.setTime( params.ts );
+    my.timezone = params.m;
+    your.timezone = params.y;
+    fn.setTime( params.t );
   }
   else {
     your.timezone = fn.getYourTimezone();
