@@ -32,23 +32,17 @@
     };
 
   fn.parseURL = function parseURL() {
-    var search = []
-      , url = {};
-
+    var url = { my: false, your: false, timestamp: false }
+      , params = window.location.search.slice( 1 ).split( 'n' );
     try {
-      search = decodeURIComponent( window.location.search )
-      .split( '&' )
-      .map(function each( segment ) {
-        return segment.split('=')[ 1 ];
-      });
-      url.t = parseInt( search[0] ) * 1000;
-      url.m = search[1];
-      url.y = search[2];
+      url.timestamp = parseInt( params[ 0 ] ) * 1000;
+      url.my = moment.tz.names()[ params[ 1 ] ];
+      url.your = moment.tz.names()[ params[ 2 ] ];
     }
     catch( err ) {
       return false;
     }
-    return !url.t || !url.m || !url.y ? false : url;
+    return !url.timestamp || !url.my || !url.your ? false : url;
   };
 
   fn.tick = function tick() {
@@ -163,11 +157,10 @@
 
   fn.onClickShare = function onClickShare(e) {
     e.preventDefault();
-    var params = {
-        t: __.timestamp / 1000
-      , m: my.timezone
-      , y: your.timezone  
-    } , url = window.location.hostname + '?' + $.param( params );
+    var url = window.location.hostname + '?' + 
+              __.timestamp / 1000 + 'n' +
+              moment.tz.names().indexOf( my.timezone ) + 'n' +
+              moment.tz.names().indexOf( your.timezone );
 
     $( '.share' ).slideDown( 400, function done() {
       $( this ).find( 'input' ).val( url ).select();
@@ -183,9 +176,9 @@
   var params = fn.parseURL();
 
   if( params !== false ) {
-    my.timezone = params.m;
-    your.timezone = params.y;
-    fn.setTime( params.t );
+    my.timezone = params.my;
+    your.timezone = params.your;
+    fn.setTime( params.timestamp );
   }
   else {
     your.timezone = fn.getYourTimezone();
