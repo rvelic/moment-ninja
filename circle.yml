@@ -14,7 +14,7 @@ dependencies:
 
 test:  
   override:
-    - grunt test && grunt build:
+    - grunt test && grunt build
   post:
     - git checkout gh-pages -- dist
     - git config user.name "circleci"
