@@ -1,0 +1,29 @@
+machine:  
+  environment:
+    TZ: Europe/Amsterdam
+  node:
+    version: v0.10.33
+
+dependencies:  
+  cache_directories:
+    - node_modules
+    - bower_components
+  override:
+    - npm prune && npm install --dev
+    - bower prune && bower install
+
+test:  
+  override:
+    - grunt test && grunt build:
+  post:
+    - git checkout gh-pages -- dist
+    - git config user.name "circleci"
+    - git config user.email "circleci@moment.ninja"
+    - git add -A
+    - git commit -m "build"
+
+deployment:  
+  master:
+    branch: master
+    commands:
+      - git push gh-pages
