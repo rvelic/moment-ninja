@@ -21,7 +21,7 @@ input {
   outline: none;
   border: none;
   background: inherit;
-  width: 100%;
+  width: 90%;
 }
 
 .time {
@@ -102,16 +102,25 @@ input {
   border-bottom: 1px solid #fafafa;
 }
 
-.my {
-}
-
-.your {
-}
-
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
   text-align: center;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 1em;
+  }
+  .btn {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+  }
+  .btn-share {
+    z-index: 1;
+    margin-top: -25px;
+  }
 }

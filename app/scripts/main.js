@@ -195,7 +195,6 @@
     });
     fn.tick();
   }
-
   __.zones = $.map( moment.tz.names(), fn.reverse );
 
   $('.zone').tabcomplete( __.zones, tabOptions );
