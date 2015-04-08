@@ -24,8 +24,7 @@ test:
     - git commit -m "build"
 
 deployment:
-  branches:
-    only:
-      - master
+  master:
+    branch: [master]
     commands:
       - git push gh-pages
