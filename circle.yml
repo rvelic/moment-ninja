@@ -16,14 +16,16 @@ test:
   override:
     - grunt test && grunt build
   post:
-    - git checkout gh-pages -- dist
+    - git checkout gh-pages
     - git config user.name "circleci"
     - git config user.email "circleci@moment.ninja"
+    - git cp -R ./dist ./
     - git add -A
     - git commit -m "build"
 
-deployment:  
-  master:
-    branch: master
+deployment:
+  branches:
+    only:
+      - master
     commands:
       - git push gh-pages
