@@ -14,7 +14,7 @@ dependencies:
 
 test:
   pre:
-    - echo '{ "main": "src/tabcomplete.js" }' >> bower_components/tabcomplete/bower.json
+    - echo "{\"main\":\"src/tabcomplete.js\"}" > bower_components/tabcomplete/bower.json
   override:
     - grunt build
   post:
