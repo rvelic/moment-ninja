@@ -27,6 +27,9 @@ test:
 
 deployment:
   master:
+    branches:
+      ignore:
+        - gh-pages
     branch: [master]
     commands:
       - git push origin gh-pages
