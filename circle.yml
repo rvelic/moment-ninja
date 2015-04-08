@@ -21,7 +21,7 @@ test:
     - git checkout gh-pages
     - git config user.name "circleci"
     - git config user.email "circleci@moment.ninja"
-    - cp -R ./dist/ ./
+    - cp -R ./dist/* ./
     - git add -A
     - git commit -m "build"
 
