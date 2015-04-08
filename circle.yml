@@ -19,14 +19,14 @@ test:
     - grunt build
   post:
     - git checkout gh-pages
-    - git config user.name "circleci"
-    - git config user.email "circleci@moment.ninja"
+    - git config user.name "bot"
+    - git config user.email "bot@moment.ninja"
     - cp -R ./dist/* ./
     - git add -A
-    - git commit -m "build"
+    - git commit -m "build $CIRCLE_BUILD_NUM"
 
 deployment:
   master:
     branch: [master]
     commands:
-      - git push gh-pages
+      - git push origin gh-pages
