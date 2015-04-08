@@ -33,7 +33,7 @@
 
   fn.parseURL = function parseURL() {
     var url = { my: false, your: false, timestamp: false }
-      , params = window.location.search.slice( 1 ).split( 'n' );
+      , params = window.location.search.slice( 1 ).split( 'f' );
     try {
       url.timestamp = parseInt( params[ 0 ] ) * 1000;
       url.my = moment.tz.names()[ params[ 1 ] ];
@@ -157,9 +157,9 @@
 
   fn.onClickShare = function onClickShare(e) {
     e.preventDefault();
-    var url = window.location.hostname + '?' + 
-              __.timestamp / 1000 + 'n' +
-              moment.tz.names().indexOf( my.timezone ) + 'n' +
+    var url = window.location.hostname + '/?' + 
+              __.timestamp / 1000 + 'f' +
+              moment.tz.names().indexOf( my.timezone ) + 'f' +
               moment.tz.names().indexOf( your.timezone );
 
     $( '.share' ).slideDown( 400, function done() {
