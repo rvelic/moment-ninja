@@ -12,9 +12,11 @@ dependencies:
     - npm install
     - bower install
 
-test:  
+test:
+  pre:
+    - echo "{ \"main\": \"src/tabcomplete.js\" }" >> bower_components/tabcomplete/bower.json
   override:
-    - grunt test && grunt build
+    - grunt build
   post:
     - git checkout gh-pages
     - git config user.name "circleci"
