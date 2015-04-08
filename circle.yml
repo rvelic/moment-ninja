@@ -26,10 +26,9 @@ test:
     - git commit -m "build $CIRCLE_BUILD_NUM"
 
 deployment:
-  branches:
+  master:
     ignore:
       - gh-pages
-  master:
     branch: [master]
     commands:
       - git push origin gh-pages
