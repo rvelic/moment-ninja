@@ -12,6 +12,12 @@ body {
   font-weight: 100;
 }
 
+input[type="text"] {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .container {
   text-align: center;
 }
@@ -34,6 +40,7 @@ input {
 
 .moment {
   height: 50%;
+  min-height: 300px;
 }
 
 .day {
@@ -120,7 +127,9 @@ input {
     line-height: 50px;
   }
   .btn-share {
-    z-index: 1;
     margin-top: -25px;
+  }
+  .moment {
+    min-height: 170px;
   }
 }
